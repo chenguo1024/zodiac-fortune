@@ -1,0 +1,12 @@
+# 依赖
+node_modules
+# 构建产物（部署时另行构建；如需 GitHub Pages 请参考 README）
+dist
+# 日志与系统文件
+*.log
+.DS_Store
+Thumbs.db
+# 环境变量与编辑器
+.env
+.vscode
+.idea

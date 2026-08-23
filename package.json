@@ -1,0 +1,17 @@
+{
+  "name": "star-words-zodiac",
+  "private": true,
+  "version": "1.0.0",
+  "description": "星语 · 星座运势 PWA",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "icons": "node scripts/make-icons.mjs"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0",
+    "vite": "^5.4.0"
+  }
+}
