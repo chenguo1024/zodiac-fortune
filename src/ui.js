@@ -32,6 +32,8 @@ export const ICONS = {
   leaf: svg('M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10zM2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12'),
   back: svg('<path d="M15 18l-6-6 6-6"/>'),
   search: svg('<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>'),
+  share: svg('<path d="M21 15v6H3v-6M12 15V3M8 7l4-4 4 4"/>'),
+  download: svg('<path d="M21 15v4H3v-4M7 12l5 5 5-5M12 17V3"/>'),
 };
 
 export const DIM_ICONS = {

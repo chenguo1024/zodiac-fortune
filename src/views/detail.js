@@ -1,6 +1,7 @@
 // 详情页：星座大图 + 日/周/月/年切换 + 五维度运势（可展开）+ 宜忌 + 开运建议
 import { getFortune, DIMENSIONS } from '../core/fortune.js';
 import { findBySignId, starsHTML, ICONS, DIM_ICONS, escapeHtml, colorHex, tabbar } from '../ui.js';
+import { makeShareCard } from '../core/shareCard.js';
 
 const TABS = [
   { key: 'daily', label: '日运' },
@@ -31,6 +32,7 @@ export function renderDetail(app, match) {
           <div class="detail-sub">${zodiac.monthStart}.${zodiac.dayStart} - ${zodiac.monthEnd}.${zodiac.dayEnd} · ${zodiac.element}象</div>
         </div>
       </div>
+      <button id="zf-share" class="round-btn share-btn" aria-label="分享运势卡片" style="margin-left:auto">${ICONS.share}</button>
     </header>
 
     <div class="seg">
@@ -108,4 +110,53 @@ export function renderDetail(app, match) {
       btn.closest('.dim-card').classList.toggle('open');
     });
   });
+
+  const shareBtn = document.getElementById('zf-share');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+      try {
+        const blob = await makeShareCard(zodiac, fortune, date);
+        openShareModal(app, blob, zodiac, fortune);
+      } catch (e) {
+        /* 生成失败静默处理 */
+      }
+    });
+  }
+}
+
+function openShareModal(app, blob, zodiac, fortune) {
+  const url = URL.createObjectURL(blob);
+  const name = `${zodiac.name}运势.png`;
+  const file = new File([blob], name, { type: 'image/png' });
+
+  app.insertAdjacentHTML('beforeend', `
+    <div class="share-overlay" id="zf-overlay">
+      <div class="share-sheet">
+        <button class="share-close" id="zf-close" aria-label="关闭">×</button>
+        <img id="zf-share-img" src="${url}" alt="运势分享卡片" />
+        <div class="share-actions">
+          <button id="zf-share-sys" class="btn">系统分享</button>
+          <a id="zf-download" class="btn ghost" download="${name}" href="${url}">保存图片</a>
+        </div>
+        <div class="share-tip">也可以长按图片直接保存到相册</div>
+      </div>
+    </div>`);
+
+  const overlay = document.getElementById('zf-overlay');
+  const close = () => overlay && overlay.remove();
+  document.getElementById('zf-close').addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+
+  const sys = document.getElementById('zf-share-sys');
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    sys.addEventListener('click', async () => {
+      try {
+        await navigator.share({ files: [file], title: `${zodiac.name}运势`, text: fortune.summary.overall });
+      } catch (err) {
+        /* 用户取消或其他原因忽略 */
+      }
+    });
+  } else {
+    sys.style.display = 'none';
+  }
 }
