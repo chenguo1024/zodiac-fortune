@@ -211,3 +211,90 @@ body::after {
 .tab svg { width: 22px; height: 22px; }
 .tab.on { color: var(--accent); }
 .tab-on-dot { display: none; }
+
+/* ============ 过渡动画 ============ */
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.page { animation: pageIn 0.38s cubic-bezier(0.2, 0.72, 0.3, 1) both; }
+.card { animation: riseIn 0.45s cubic-bezier(0.2, 0.72, 0.3, 1) both; animation-delay: calc(var(--i, 0) * 45ms); }
+
+/* ============ 详情维度卡（可展开） ============ */
+.dim-card { display: block; padding: 0; overflow: hidden; }
+.dim-main {
+  display: flex; align-items: flex-start; gap: 12px; width: 100%; padding: 14px 16px;
+  background: none; border: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+}
+.dim-main:active { background: rgba(255, 255, 255, 0.045); }
+.dim-icon { flex-shrink: 0; margin-top: 2px; pointer-events: none; }
+.dim-icon svg { width: 22px; height: 22px; }
+.dim-body { flex: 1; display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.dim-label { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+.dim-text { font-size: 14px; line-height: 1.6; color: rgba(241, 240, 255, 0.83); }
+.dim-chev {
+  flex-shrink: 0; width: 9px; height: 9px; margin-top: 9px;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: rotate(45deg); transition: transform 0.3s ease;
+}
+.dim-card.open .dim-chev { transform: rotate(225deg); }
+
+.dim-detail {
+  display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.35s ease;
+}
+.dim-detail-inner { overflow: hidden; }
+.dim-detail-inner p {
+  margin: 0; padding: 4px 16px 16px 50px; font-size: 14px; line-height: 1.7; color: rgba(241, 240, 255, 0.72);
+}
+.dim-card.open .dim-detail { grid-template-rows: 1fr; }
+
+/* ============ 开运建议 / 宜忌 ============ */
+.advice-card { display: flex; gap: 12px; align-items: flex-start; margin-top: 12px; }
+.advice-card .advice-icon { flex-shrink: 0; color: var(--gold); margin-top: 1px; }
+.advice-card .advice-icon svg { width: 22px; height: 22px; }
+.advice-card p { font-size: 14px; line-height: 1.65; color: rgba(241, 240, 255, 0.82); }
+
+.yj-card { display: grid; gap: 13px; padding: 15px 16px; margin-top: 12px; }
+.yj-row { display: flex; align-items: center; gap: 10px; }
+.yj-tag {
+  flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+  text-align: center; line-height: 24px; font-size: 13px; font-weight: 700;
+}
+.yj-tag.yi { background: rgba(52, 211, 153, 0.18); color: #34d399; }
+.yj-tag.ji { background: rgba(248, 113, 113, 0.18); color: #f87171; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  padding: 4px 10px; border-radius: 500px; font-size: 12px;
+  background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(241, 240, 255, 0.85);
+}
+
+/* ============ 生日选择 UI ============ */
+.birthday-card { padding: 18px 16px; }
+.birthday-preview {
+  display: flex; align-items: center; gap: 14px; padding: 14px 16px; margin: 4px 0 16px;
+  border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(120deg, rgba(167, 139, 250, 0.18), rgba(255, 255, 255, 0.04));
+}
+.birthday-picker { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.picker-col { display: flex; flex-direction: column; gap: 7px; align-items: center; }
+.picker-label { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; }
+.picker-col select {
+  width: 100%; padding: 12px 4px; text-align: center; text-align-last: center;
+  border-radius: 12px; border: 1px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.06); color: var(--text);
+  font-size: 16px; font-weight: 600; outline: none;
+  -webkit-appearance: none; appearance: none; color-scheme: dark;
+}
+.picker-col select:focus { border-color: var(--accent); }
+.birthday-hint { text-align: center; font-size: 12px; color: var(--text-dim); margin: 12px 0 2px; }
+.btn-text {
+  display: block; width: 100%; margin-top: 6px; background: none; border: none;
+  color: var(--text-dim); font-size: 13px; padding: 8px; cursor: pointer;
+}
+.btn-text:active { color: var(--text); }
+

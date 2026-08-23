@@ -1,6 +1,5 @@
-// 详情页：星座大图 + 日/周/月/年切换 + 五维度运势
+// 详情页：星座大图 + 日/周/月/年切换 + 五维度运势（可展开）+ 宜忌 + 开运建议
 import { getFortune, DIMENSIONS } from '../core/fortune.js';
-import { periodLabel } from '../core/zodiacCalc.js';
 import { findBySignId, starsHTML, ICONS, DIM_ICONS, escapeHtml, colorHex, tabbar } from '../ui.js';
 
 const TABS = [
@@ -47,15 +46,42 @@ export function renderDetail(app, match) {
     </div>
 
     <div class="dim-list">
-      ${DIMENSIONS.map((d) => `
-        <div class="card dim-card">
-          <div class="dim-icon" style="color:${d.color}">${DIM_ICONS[d.key]}</div>
-          <div class="dim-body">
-            <div class="dim-label" style="color:${d.color}">${d.label}运势</div>
-            <p class="dim-text">${escapeHtml(fortune[d.key])}</p>
+      ${DIMENSIONS.map((d, i) => `
+        <div class="card dim-card ${i === 0 ? 'open' : ''}" style="--i:${i}">
+          <button type="button" class="dim-main">
+            <span class="dim-icon" style="color:${d.color}">${DIM_ICONS[d.key]}</span>
+            <span class="dim-body">
+              <span class="dim-label" style="color:${d.color}">${d.label}运势</span>
+              <span class="dim-text">${escapeHtml(fortune.summary[d.key])}</span>
+            </span>
+            <span class="dim-chev" style="color:${d.color}"></span>
+          </button>
+          <div class="dim-detail">
+            <div class="dim-detail-inner">
+              <p>${escapeHtml(fortune.detail[d.key])}</p>
+            </div>
           </div>
         </div>
       `).join('')}
+    </div>
+
+    <div class="card advice-card">
+      <div class="advice-icon">${ICONS.sparkle}</div>
+      <div>
+        <div class="card-title" style="margin-bottom:6px">开运建议</div>
+        <p>${escapeHtml(fortune.advice)}</p>
+      </div>
+    </div>
+
+    <div class="card yj-card">
+      <div class="yj-row">
+        <span class="yj-tag yi">宜</span>
+        <div class="chips">${fortune.yi.map((c) => `<span class="chip">${escapeHtml(c)}</span>`).join('')}</div>
+      </div>
+      <div class="yj-row">
+        <span class="yj-tag ji">忌</span>
+        <div class="chips">${fortune.ji.map((c) => `<span class="chip">${escapeHtml(c)}</span>`).join('')}</div>
+      </div>
     </div>
 
     <div class="card lucky-bar">
@@ -65,7 +91,7 @@ export function renderDetail(app, match) {
       </div>
       <div class="lucky-item">
         <div class="lucky-label">幸运颜色</div>
-        <div class="lucky-value color-dot-wrap"><span class="color-dot" style="background:${colorHex(fortune.luckyColor)}"></span>${fortune.luckyColor}</div>
+        <div class="lucky-value"><span class="color-dot" style="background:${colorHex(fortune.luckyColor)}"></span>${fortune.luckyColor}</div>
       </div>
       <div class="lucky-item">
         <div class="lucky-label">速配星座</div>
@@ -73,7 +99,13 @@ export function renderDetail(app, match) {
       </div>
     </div>
 
-    <div class="tip">以上运势由本地算法按「星座 + 日期」确定性生成，离线可用。</div>
+    <div class="tip">点击卡片展开详细解读 · 以上运势由本地算法按「星座 + 日期」确定性生成，离线可用。</div>
   </div>
   ${tabbar('home')}`;
+
+  app.querySelectorAll('.dim-main').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      btn.closest('.dim-card').classList.toggle('open');
+    });
+  });
 }

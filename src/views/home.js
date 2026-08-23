@@ -53,10 +53,10 @@ export function renderHome(app) {
     </div>
 
     <div class="grid">
-      ${signs.map((z) => {
+      ${signs.map((z, idx) => {
         const f = getFortune(z.id, 'daily', date);
         return `
-        <a class="card sign-cell" href="#/sign/${z.id}">
+        <a class="card sign-cell" style="--i:${idx}" href="#/sign/${z.id}">
           <div class="sign-symbol">${z.symbol}</div>
           <div class="sign-name">${z.name}</div>
           <div class="sign-range">${z.monthStart}.${z.dayStart} - ${z.monthEnd}.${z.dayEnd}</div>

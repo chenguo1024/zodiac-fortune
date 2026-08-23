@@ -1,7 +1,7 @@
 // 运势生成：根据「星座 + 周期 + 日期」确定性生成，
 // 保证同一天、同一星座、同一周期得到稳定一致的结果
 import { ZODIACS, ELEMENT_MATCH } from '../data/zodiac.js';
-import { POOLS, LUCKY_COLORS } from '../data/fortunePool.js';
+import { POOLS, LUCKY_COLORS, DETAIL_POOLS, ADVICE, YI, JI } from '../data/fortunePool.js';
 import { typeKey } from './zodiacCalc.js';
 
 // FNV-1a 字符串哈希
@@ -27,7 +27,17 @@ function mulberry32(seed) {
 
 const pick = (rng, arr) => arr[Math.floor(rng() * arr.length)];
 
-// 生成 1-5 星评分（3、4 星居多，低分高分都有，避免每项都 5 星假得离谱）
+// 从数组里不重复地选 n 个
+function pickN(rng, arr, n) {
+  const copy = [...arr];
+  const out = [];
+  for (let i = 0; i < n && copy.length > 0; i++) {
+    out.push(copy.splice(Math.floor(rng() * copy.length), 1)[0]);
+  }
+  return out;
+}
+
+// 生成 1-5 星评分（3、4 星居多，低分高分都有，避免每项都 5 星）
 function makeScore(rng) {
   const roll = rng();
   if (roll < 0.08) return 2;
@@ -56,10 +66,16 @@ export function getFortune(signId, type, date = new Date()) {
     score: makeScore(rng),
     luckyNumber: 1 + Math.floor(rng() * 9),
     luckyColor: pick(rng, LUCKY_COLORS),
+    advice: pick(rng, ADVICE),
+    yi: pickN(rng, YI, 2),
+    ji: pickN(rng, JI, 2),
+    summary: {},
+    detail: {},
   };
 
   for (const dim of DIMENSIONS) {
-    fortune[dim.key] = pick(rng, POOLS[dim.key]);
+    fortune.summary[dim.key] = pick(rng, POOLS[dim.key]);
+    fortune.detail[dim.key] = pick(rng, DETAIL_POOLS[dim.key]);
   }
 
   const candidateElements = ELEMENT_MATCH[zodiac.element];
