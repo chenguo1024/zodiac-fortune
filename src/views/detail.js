@@ -1,7 +1,7 @@
 // 详情页：星座大图 + 日/周/月/年切换 + 五维度运势
 import { getFortune, DIMENSIONS } from '../core/fortune.js';
 import { periodLabel } from '../core/zodiacCalc.js';
-import { findBySignId, starsHTML, ICONS, DIM_ICONS, escapeHtml } from '../ui.js';
+import { findBySignId, starsHTML, ICONS, DIM_ICONS, escapeHtml, colorHex, tabbar } from '../ui.js';
 
 const TABS = [
   { key: 'daily', label: '日运' },
@@ -29,7 +29,7 @@ export function renderDetail(app, match) {
         <span class="detail-symbol">${zodiac.symbol}</span>
         <div>
           <div class="detail-name">${zodiac.name}</div>
-          <div class="detail-sub">${zodiac.monthStart}.${zodiac.monthStart === zodiac.monthStart ? zodiac.dayStart : ''} - ${zodiac.monthEnd}.${zodiac.dayEnd} · ${zodiac.element}象</div>
+          <div class="detail-sub">${zodiac.monthStart}.${zodiac.dayStart} - ${zodiac.monthEnd}.${zodiac.dayEnd} · ${zodiac.element}象</div>
         </div>
       </div>
     </header>
